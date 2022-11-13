@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * State entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor

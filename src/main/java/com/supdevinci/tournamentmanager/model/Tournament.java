@@ -17,6 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Tournament entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Player entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor
