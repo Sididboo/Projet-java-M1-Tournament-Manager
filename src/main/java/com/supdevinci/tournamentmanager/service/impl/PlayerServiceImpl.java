@@ -10,6 +10,9 @@ import com.supdevinci.tournamentmanager.service.PlayerService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service to interact with the database with the table player.
+ */
 @Service
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {

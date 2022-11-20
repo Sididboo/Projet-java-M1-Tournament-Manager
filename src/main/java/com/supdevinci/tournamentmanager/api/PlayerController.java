@@ -15,6 +15,9 @@ import com.supdevinci.tournamentmanager.service.PlayerService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Player controller.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/v1/player", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -23,6 +26,11 @@ public class PlayerController {
     private final PlayerService playerService;
     private PlayerMapper mapper = Mappers.getMapper(PlayerMapper.class);
 
+    /**
+     * Get all players.
+     * 
+     * @return the list of players
+     */
     @GetMapping
     public ResponseEntity<List<PlayerDto>> getPlayers() {
         return ResponseEntity.ok(mapper.mapToDto(playerService.findAllPlayers()));

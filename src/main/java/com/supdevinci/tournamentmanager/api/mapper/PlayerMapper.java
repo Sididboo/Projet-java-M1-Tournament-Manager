@@ -7,6 +7,9 @@ import org.mapstruct.Mapper;
 import com.supdevinci.tournamentmanager.api.dto.PlayerDto;
 import com.supdevinci.tournamentmanager.model.Player;
 
+/**
+ * Player mapper.
+ */
 @Mapper(componentModel = "spring")
 public interface PlayerMapper {
 

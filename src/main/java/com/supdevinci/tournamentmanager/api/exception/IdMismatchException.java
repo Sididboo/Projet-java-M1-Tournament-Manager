@@ -1,5 +1,8 @@
 package com.supdevinci.tournamentmanager.api.exception;
 
+/**
+ * Bad request exception custom.
+ */
 public class IdMismatchException extends RuntimeException {
 
     public IdMismatchException(Long pathId, Long bodyId) {

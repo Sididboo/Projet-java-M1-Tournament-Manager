@@ -11,6 +11,10 @@ import com.supdevinci.tournamentmanager.api.dto.ErrorCodeEnum;
 import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
 import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
 
+/**
+ * Controller advice.
+ * Handles http errors.
+ */
 public class MyControllerAdvice {
 
     @ResponseBody

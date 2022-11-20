@@ -39,7 +39,7 @@ public class Player {
     private List<Team> teams;
 
     /**
-     * COnstructor
+     * Constructor.
      * 
      * @param id
      * @param speudo

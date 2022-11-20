@@ -25,7 +25,8 @@ public class PlayerControllerTest {
     private PlayerRepository playerRepository;
 
     @Test
-    void testGetPlayers() throws Exception {
+    void testGetPlayers_shouldBeOk() throws Exception {
+        // Test data
         playerRepository.save(Constant.P1);
         playerRepository.save(Constant.P2);
 
