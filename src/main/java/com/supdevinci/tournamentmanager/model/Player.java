@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Player {
 
@@ -32,7 +35,20 @@ public class Player {
     @Column(nullable = false)
     private String postalAdress;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Team> teams;
+
+    /**
+     * Constructor.
+     * 
+     * @param id
+     * @param speudo
+     * @param postalAdress
+     */
+    public Player(Long id, String speudo, String postalAdress) {
+        this.id = id;
+        this.speudo = speudo;
+        this.postalAdress = postalAdress;
+    }
 
 }
