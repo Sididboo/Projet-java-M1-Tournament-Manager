@@ -1,6 +1,7 @@
 package com.supdevinci.tournamentmanager.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player savePlayer(Player player) {
         return playerRepository.save(player);
+    }
+
+    @Override
+    public Optional<Player> findPlayerById(Long id) {
+        return playerRepository.findById(id);
     }
 
 }
