@@ -1,6 +1,7 @@
 package com.supdevinci.tournamentmanager.api;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +16,7 @@ import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
  * Controller advice.
  * Handles http errors.
  */
+@ControllerAdvice
 public class MyControllerAdvice {
 
     @ResponseBody
@@ -38,6 +40,18 @@ public class MyControllerAdvice {
                 .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message(ex.getMessage())
                 .error(ErrorCodeEnum.ID_MISMATCH)
+                .build();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = { NumberFormatException.class })
+    protected ApiError handleBadRequest(NumberFormatException ex, WebRequest request) {
+        return ApiError.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .error(ErrorCodeEnum.BAD_TYPE_VALUE)
                 .build();
     }
 
