@@ -1,6 +1,7 @@
 package com.supdevinci.tournamentmanager.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.supdevinci.tournamentmanager.model.Player;
 
@@ -17,9 +18,17 @@ public interface PlayerService {
     Player savePlayer(Player player);
 
     /**
-     *  Find all players.
+     * Find all players.
      * 
      * @return the list of all players
      */
     List<Player> findAllPlayers();
+
+    /**
+     * Find one player by id.
+     * 
+     * @param id
+     * @return one player
+     */
+    Optional<Player> findPlayerById(Long id);
 }

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table
 public class Team {
 
     @Id
@@ -29,10 +31,23 @@ public class Team {
     @Column(nullable = false)
     private String teamName;
 
-    @ManyToMany(mappedBy = "teams")
+    @ManyToMany
     private List<Player> players;
 
     @ManyToMany
     private List<Tournament> tournaments;
+
+    /**
+     * Contructor.
+     * 
+     * @param id
+     * @param teamName
+     * @param players
+     */
+    public Team(Long id, String teamName, List<Player> players) {
+        this.id = id;
+        this.teamName = teamName;
+        this.players = players;
+    }
 
 }
