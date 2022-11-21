@@ -46,7 +46,7 @@ public class DatabaseConfig {
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             dataSource.setUrl("jdbc:mysql://" + System.getenv(EnvConstant.MYSQL_HOST) + ":"
                     + System.getenv(EnvConstant.MYSQL_PORT) + "/"
-                    + System.getenv(EnvConstant.MYSQL_DATABASE) + "?useSSL=false");
+                    + System.getenv(EnvConstant.MYSQL_DATABASE) + "?allowPublicKeyRetrieval=true&useSSL=false");
             dataSource.setUsername(System.getenv(EnvConstant.MYSQL_USERNAME));
             dataSource.setPassword(System.getenv(EnvConstant.MYSQL_PASSWORD));
 
@@ -97,7 +97,7 @@ public class DatabaseConfig {
             Properties properties = new Properties();
             properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
-            properties.setProperty("hibernate.show_sql", "false");
+            properties.setProperty("hibernate.show_sql", "true");
 
             return properties;
 
