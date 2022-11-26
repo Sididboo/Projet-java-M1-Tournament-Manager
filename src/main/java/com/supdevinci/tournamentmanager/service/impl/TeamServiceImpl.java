@@ -1,6 +1,7 @@
 package com.supdevinci.tournamentmanager.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,11 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<Team> findAllTeams() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public Optional<Team> findTeamById(Long id) {
+        return teamRepository.findById(id);
     }
 
 }
