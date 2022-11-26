@@ -13,7 +13,7 @@ import lombok.Data;
 public class PlayerDetailDto {
     
     Long id;
-    String speudo;
+    String pseudo;
     String postalAdress;
     List<TeamDto> teams;
 

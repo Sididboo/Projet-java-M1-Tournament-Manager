@@ -1,12 +1,13 @@
 package com.supdevinci.tournamentmanager.api.mapper;
 
-import java.util.List;
-
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.supdevinci.tournamentmanager.api.dto.PlayerDetailDto;
 import com.supdevinci.tournamentmanager.api.dto.PlayerDto;
+import com.supdevinci.tournamentmanager.api.dto.TeamDto;
 import com.supdevinci.tournamentmanager.model.Player;
+import com.supdevinci.tournamentmanager.model.Team;
 
 /**
  * Player mapper.
@@ -14,8 +15,12 @@ import com.supdevinci.tournamentmanager.model.Player;
 @Mapper(componentModel = "spring")
 public interface PlayerMapper {
 
-    List<PlayerDto> mapToListDto(List<Player> player);
+    PlayerDto mapToDto(Player player);
 
-    PlayerDetailDto mapToDto(Player player);
+    PlayerDetailDto mapToDetailDto(Player player);
+
+    // This mapper will be automatically detected if another mapper needs to map the same type
+    @Mapping(target = "players", ignore = true)
+    TeamDto mapToTeamDto(Team team);
 
 }

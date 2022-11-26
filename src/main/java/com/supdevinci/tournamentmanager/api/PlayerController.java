@@ -13,6 +13,7 @@ import com.supdevinci.tournamentmanager.api.dto.PlayerDetailDto;
 import com.supdevinci.tournamentmanager.api.dto.PlayerDto;
 import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
 import com.supdevinci.tournamentmanager.api.mapper.PlayerMapper;
+import com.supdevinci.tournamentmanager.model.Player;
 import com.supdevinci.tournamentmanager.service.PlayerService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,12 @@ public class PlayerController {
      */
     @GetMapping
     public ResponseEntity<List<PlayerDto>> getPlayers() {
-        return ResponseEntity.ok(mapper.mapToListDto(playerService.findAllPlayers()));
+        return ResponseEntity
+                .ok(playerService
+                        .findAllPlayers()
+                        .stream()
+                        .map((Player player) -> mapper.mapToDto(player))
+                        .toList());
     }
 
     /**
@@ -47,7 +53,7 @@ public class PlayerController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<PlayerDetailDto> getPlayerById(@PathVariable(name = "id") Long id) {
         return playerService.findPlayerById(id)
-                .map(mapper::mapToDto)
+                .map(mapper::mapToDetailDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Player", id));
     }
