@@ -31,7 +31,7 @@ public class Player {
     private Long id;
 
     @Column(nullable = false)
-    private String speudo;
+    private String pseudo;
 
     @Column(nullable = false)
     private String postalAdress;
@@ -43,12 +43,12 @@ public class Player {
      * Constructor.
      * 
      * @param id
-     * @param speudo
+     * @param pseudo
      * @param postalAdress
      */
-    public Player(Long id, String speudo, String postalAdress) {
+    public Player(Long id, String pseudo, String postalAdress) {
         this.id = id;
-        this.speudo = speudo;
+        this.pseudo = pseudo;
         this.postalAdress = postalAdress;
     }
 
