@@ -11,6 +11,6 @@ import lombok.Data;
 public class PlayerDto {
     
     Long id;
-    String speudo;
+    String pseudo;
 
 }
