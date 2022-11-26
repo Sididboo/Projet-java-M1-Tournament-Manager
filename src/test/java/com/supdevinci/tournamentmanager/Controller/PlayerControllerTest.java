@@ -36,59 +36,60 @@ import com.supdevinci.tournamentmanager.repository.TeamRepository;
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD) // Create database before each test
 public class PlayerControllerTest {
 
-        @Autowired
-        private MockMvc mockMvc;
-        @Autowired
-        private PlayerRepository playerRepository;
-        @Autowired
-        private TeamRepository teamRepository;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private PlayerRepository playerRepository;
+    @Autowired
+    private TeamRepository teamRepository;
 
-        // GetPlayers
+    // GetPlayers
 
-        @Test
-        void testGetPlayers_shouldBeOk() throws Exception {
-                // Test data
-                playerRepository.save(Constant.P1);
-                playerRepository.save(Constant.P2);
+    @Test
+    void testGetPlayers_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
 
-                MvcResult mvcResult = mockMvc.perform(get("/v1/player"))
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk())
-                                .andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/v1/player"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
 
-                assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
-                                mvcResult.getResponse().getContentAsString());
-        }
+        assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
+                mvcResult.getResponse().getContentAsString());
+    }
 
-        // GetPlayer
+    // GetPlayer
 
-        @Test
-        void testGetPlayerById_shouldBeOk() throws Exception {
-                // Test data
-                playerRepository.save(Constant.P1);
-                teamRepository.save(Constant.T1);
+    @Test
+    void testGetPlayerById_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        teamRepository.save(Constant.T1);
 
-                MvcResult mvcResult = mockMvc.perform(get("/v1/player/1"))
-                                .andExpect(status().isOk())
-                                .andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/v1/player/1"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-                assertEquals("{\"id\":1,\"pseudo\":\"P1\",\"postalAdress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
-                                mvcResult.getResponse().getContentAsString());
-        }
+        assertEquals(
+                "{\"id\":1,\"pseudo\":\"P1\",\"postalAdress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
+                mvcResult.getResponse().getContentAsString());
+    }
 
-        @Test
-        void testGetPlayerById_shouldBeNotFound() throws Exception {
-                mockMvc.perform(get("/v1/player/1"))
-                                .andExpect(status().isNotFound());
-        }
+    @Test
+    void testGetPlayerById_shouldBeNotFound() throws Exception {
+        mockMvc.perform(get("/v1/player/1"))
+                .andExpect(status().isNotFound());
+    }
 
-        @Test
-        void testGetPlayerById_shouldBeBadRequest() throws Exception {
-                // Test data
-                playerRepository.save(Constant.P1);
+    @Test
+    void testGetPlayerById_shouldBeBadRequest() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
 
-                mockMvc.perform(get("/v1/player/ee"))
-                                .andExpect(status().isBadRequest());
-        }
+        mockMvc.perform(get("/v1/player/ee"))
+                .andExpect(status().isBadRequest());
+    }
 
 }

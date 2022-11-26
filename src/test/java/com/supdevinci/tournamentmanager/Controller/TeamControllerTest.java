@@ -2,7 +2,6 @@ package com.supdevinci.tournamentmanager.Controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,7 +28,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
+import com.supdevinci.tournamentmanager.repository.StateRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
+import com.supdevinci.tournamentmanager.repository.TournamentRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,11 +44,15 @@ public class TeamControllerTest {
     private PlayerRepository playerRepository;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private StateRepository stateRepository;
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
-    // GetPlayers
+    // GetTeams
 
     @Test
-    void testGetPlayers_shouldBeOk() throws Exception {
+    void testGetTeams_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
         playerRepository.save(Constant.P2);
@@ -56,7 +61,6 @@ public class TeamControllerTest {
         teamRepository.save(Constant.T2);
 
         MvcResult mvcResult = mockMvc.perform(get("/v1/team"))
-                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -66,4 +70,41 @@ public class TeamControllerTest {
                 mvcResult.getResponse().getContentAsString());
     }
 
+    // GetTeam
+
+    @Test
+    void testGetTeamById_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        stateRepository.save(Constant.S1);
+        stateRepository.save(Constant.S2);
+        stateRepository.save(Constant.S3);
+        tournamentRepository.save(Constant.TO1);
+        tournamentRepository.save(Constant.TO2);
+        tournamentRepository.save(Constant.TO3);
+
+        MvcResult mvcResult = mockMvc.perform(get("/v1/team/1"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertEquals("{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"}],\"nbVictories\":1}",
+                mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void testGetTeamById_shouldBeNotFound() throws Exception {
+        mockMvc.perform(get("/v1/team/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetTeamById_shouldBeBadRequest() throws Exception {
+        mockMvc.perform(get("/v1/team/ee"))
+                .andExpect(status().isBadRequest());
+    }
 }
