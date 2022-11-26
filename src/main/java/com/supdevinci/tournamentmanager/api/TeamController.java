@@ -16,7 +16,7 @@ import com.supdevinci.tournamentmanager.service.TeamService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Player controller.
+ * Team controller.
  */
 @RequiredArgsConstructor
 @RestController

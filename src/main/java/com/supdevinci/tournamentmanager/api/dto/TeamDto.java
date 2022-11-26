@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Team DTO.
+ */
 @Data
 @Builder
 public class TeamDto {

@@ -5,6 +5,8 @@ package com.supdevinci.tournamentmanager.constant;
  */
 public class EnvConstant {
 
+    private EnvConstant() {}
+
     public static final String PRODUCTION = "PRODUCTION";
     public static final String MYSQL_HOST = "MYSQL_HOST";
     public static final String MYSQL_PORT = "MYSQL_PORT";

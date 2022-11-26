@@ -61,8 +61,9 @@ public class TeamControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(mvcResult.getResponse().getContentAsString(),
-                "[{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"}]},{\"id\":2,\"teamName\":\"T2\",\"players\":[{\"id\":2,\"pseudo\":\"P2\"},{\"id\":3,\"pseudo\":\"P3\"}]}]");
+        assertEquals(
+                "[{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"}]},{\"id\":2,\"teamName\":\"T2\",\"players\":[{\"id\":2,\"pseudo\":\"P2\"},{\"id\":3,\"pseudo\":\"P3\"}]}]",
+                mvcResult.getResponse().getContentAsString());
     }
 
 }

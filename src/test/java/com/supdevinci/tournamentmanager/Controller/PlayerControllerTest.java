@@ -56,8 +56,8 @@ public class PlayerControllerTest {
                                 .andExpect(status().isOk())
                                 .andReturn();
 
-                assertEquals(mvcResult.getResponse().getContentAsString(),
-                                "[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]");
+                assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
+                                mvcResult.getResponse().getContentAsString());
         }
 
         // GetPlayer
@@ -72,8 +72,8 @@ public class PlayerControllerTest {
                                 .andExpect(status().isOk())
                                 .andReturn();
 
-                assertEquals(mvcResult.getResponse().getContentAsString(),
-                                "{\"id\":1,\"pseudo\":\"P1\",\"postalAdress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}");
+                assertEquals("{\"id\":1,\"pseudo\":\"P1\",\"postalAdress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
+                                mvcResult.getResponse().getContentAsString());
         }
 
         @Test
