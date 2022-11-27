@@ -34,7 +34,7 @@ public class Player {
     private String pseudo;
 
     @Column(nullable = false)
-    private String postalAdress;
+    private String postalAddress;
 
     @ManyToMany(mappedBy = "players")
     private List<Team> teams;
@@ -44,12 +44,12 @@ public class Player {
      * 
      * @param id
      * @param pseudo
-     * @param postalAdress
+     * @param postalAddress
      */
-    public Player(Long id, String pseudo, String postalAdress) {
+    public Player(Long id, String pseudo, String postalAddress) {
         this.id = id;
         this.pseudo = pseudo;
-        this.postalAdress = postalAdress;
+        this.postalAddress = postalAddress;
     }
 
 }
