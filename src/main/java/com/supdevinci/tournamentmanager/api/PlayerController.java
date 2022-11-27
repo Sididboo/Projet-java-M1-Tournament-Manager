@@ -1,6 +1,5 @@
 package com.supdevinci.tournamentmanager.api;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class PlayerController {
     public ResponseEntity<PlayerDto> createPlayer(
             @RequestBody PlayerCreateDto playerCreateDto
     ){
-        Player player = PlayerController.mapToEntity(playerCreateDto);
+        Player player = mapper.mapToEntity(playerCreateDto);
         Player createdPlayer = playerService.savePlayer(player);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDto(createdPlayer));
     }
@@ -105,13 +104,6 @@ public class PlayerController {
 
 
 
-    private static Player mapToEntity(PlayerCreateDto playerCreateDto) {
-        Player player = new Player();
-        player.setPseudo(playerCreateDto.getPseudo());
-        player.setPostalAddress(playerCreateDto.getPostalAddress());
-        player.setTeams(new ArrayList<>());
 
-        return player;
-    }
 
 }

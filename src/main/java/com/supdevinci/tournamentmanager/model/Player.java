@@ -30,10 +30,10 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String pseudo;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String postalAddress;
 
     @ManyToMany(mappedBy = "players")
