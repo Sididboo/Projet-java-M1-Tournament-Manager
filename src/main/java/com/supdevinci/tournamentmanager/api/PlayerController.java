@@ -74,10 +74,10 @@ public class PlayerController {
     }
 
     /**
-     * Update player details.
+     * Update player.
      *
      * @param id
-     * @return update the details of one player
+     * @return update pseudo of one player
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity<PlayerDto> updatePlayer(
