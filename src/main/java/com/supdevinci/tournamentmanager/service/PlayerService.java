@@ -31,4 +31,13 @@ public interface PlayerService {
      * @return one player
      */
     Optional<Player> findPlayerById(Long id);
+
+    /**
+     * 
+     * Find players with list of identifiers.
+     * 
+     * @param ids
+     * @return list of players
+     */
+    List<Player> findPlayersByIds(List<Long> ids);
 }

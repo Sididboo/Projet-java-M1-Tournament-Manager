@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /* 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; 
@@ -25,6 +26,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
@@ -49,7 +51,7 @@ public class TeamControllerTest {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    // GetTeams
+    // getTeams
 
     @Test
     void testGetTeams_shouldBeOk() throws Exception {
@@ -70,7 +72,7 @@ public class TeamControllerTest {
                 mvcResult.getResponse().getContentAsString());
     }
 
-    // GetTeam
+    // getTeamById
 
     @Test
     void testGetTeamById_shouldBeOk() throws Exception {
@@ -105,6 +107,48 @@ public class TeamControllerTest {
     @Test
     void testGetTeamById_shouldBeBadRequest() throws Exception {
         mockMvc.perform(get("/v1/team/ee"))
+                .andExpect(status().isBadRequest());
+    }
+
+    // createTeam
+
+    @Test
+    void testCreateTeam_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/team")
+                .content("{\"teamName\": \"T1\", \"playerIds\": [1, 2]}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        assertEquals(
+                "{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}],\"nbVictories\":0}",
+                mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void testCreateTeam_shouldBeBadRequest_withTheOmissionOfTheTeamName() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/team")
+                .content("{\"playerIds\": [1, 2]}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateTeam_shouldBeBadRequest_withTheOmissionOfThePlayerIds() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/team")
+                .content("{\"teamName\": \"T1\"")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 }

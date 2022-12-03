@@ -43,7 +43,7 @@ public class PlayerControllerTest {
     @Autowired
     private TeamRepository teamRepository;
 
-    // GetPlayers
+    // getPlayers
 
     @Test
     void testGetPlayers_shouldBeOk() throws Exception {
@@ -60,7 +60,7 @@ public class PlayerControllerTest {
                 mvcResult.getResponse().getContentAsString());
     }
 
-    // GetPlayer
+    // getPlayerById
 
     @Test
     void testGetPlayerById_shouldBeOk() throws Exception {
