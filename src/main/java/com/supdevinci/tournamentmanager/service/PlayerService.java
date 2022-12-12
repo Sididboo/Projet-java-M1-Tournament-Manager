@@ -35,13 +35,13 @@ public interface PlayerService {
      */
     Optional<Player> findPlayerById(Long id);
 
-
     /**
-     * Delete one player by id.
-     *
-     * @param id
-     * @return one player
+     * 
+     * Find players with list of identifiers.
+     * 
+     * @param ids
+     * @return list of players
      */
-    String deletePlayer(Long id);
+    List<Player> findPlayersByIds(List<Long> ids);
 
 }

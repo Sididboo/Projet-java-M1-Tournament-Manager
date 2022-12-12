@@ -37,9 +37,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public String deletePlayer(Long id) {
-        playerRepository.deleteById(id);
-        return "Player n°"+id+" has been removed !";
+    public List<Player> findPlayersByIds(List<Long> ids) {
+        return playerRepository.findByIdIn(ids);
     }
 
 

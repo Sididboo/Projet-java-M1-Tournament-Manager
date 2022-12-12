@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
 public class Tournament {
@@ -49,5 +51,24 @@ public class Tournament {
 
     @OneToOne
     private Team winningTeam;
+
+    /**
+     * Constructor.
+     * 
+     * @param id
+     * @param subject
+     * @param description
+     * @param dateBegin
+     * @param state
+     * @param teams
+     */
+    public Tournament(Long id, String subject, String description, Timestamp dateBegin, State state, List<Team> teams) {
+        this.id = id;
+        this.subject = subject;
+        this.description = description;
+        this.dateBegin = dateBegin;
+        this.state = state;
+        this.teams = teams;
+    }
 
 }
