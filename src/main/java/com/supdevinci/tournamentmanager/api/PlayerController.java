@@ -36,7 +36,7 @@ public class PlayerController {
      */
     @PostMapping
     public ResponseEntity<PlayerDto> createPlayer(
-            @RequestBody PlayerCreateDto playerCreateDto
+            @RequestBody @Valid PlayerCreateDto playerCreateDto
     ){
         Player player = mapper.mapToEntity(playerCreateDto);
         Player createdPlayer = playerService.savePlayer(player);
