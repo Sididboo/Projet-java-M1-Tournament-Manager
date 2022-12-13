@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -73,7 +74,7 @@ public class PlayerControllerTest {
                 .andReturn();
 
         assertEquals(
-                "{\"id\":1,\"pseudo\":\"P1\",\"postalAdress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
+                "{\"id\":1,\"pseudo\":\"P1\",\"postalAddress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
                 mvcResult.getResponse().getContentAsString());
     }
 
@@ -88,8 +89,51 @@ public class PlayerControllerTest {
         // Test data
         playerRepository.save(Constant.P1);
 
-        mockMvc.perform(get("/v1/player/ee"))
+        mockMvc.perform(get("/v1/player/aError400"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void testCreatePlayer_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"pseudo\": \"P4\", \"postalAddress\": 24003}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        assertEquals(
+                "{\"id\":4,\"pseudo\":\"P4\"}",
+                mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePseudo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"postalAddress\": 24000}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePostalAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/team")
+                        .content("{\"pseudo\": \"P1\"")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
 
 }
