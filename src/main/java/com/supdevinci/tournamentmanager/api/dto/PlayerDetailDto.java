@@ -14,7 +14,7 @@ public class PlayerDetailDto {
     
     Long id;
     String pseudo;
-    String postalAdress;
+    String postalAddress;
     List<TeamDto> teams;
 
 }
