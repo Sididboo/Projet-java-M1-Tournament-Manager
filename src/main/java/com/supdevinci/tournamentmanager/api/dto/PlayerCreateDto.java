@@ -1,14 +1,17 @@
 package com.supdevinci.tournamentmanager.api.dto;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotBlank;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class PlayerCreateDto {
-    @NotNull
+
+    @NotBlank
     private String pseudo;
+    @NotBlank
     private String postalAddress;
 
 }

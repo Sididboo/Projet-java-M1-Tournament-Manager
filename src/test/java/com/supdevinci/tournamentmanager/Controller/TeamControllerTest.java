@@ -51,7 +51,7 @@ public class TeamControllerTest {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    // getTeams
+    // #region getTeams
 
     @Test
     void testGetTeams_shouldBeOk() throws Exception {
@@ -72,7 +72,9 @@ public class TeamControllerTest {
                 mvcResult.getResponse().getContentAsString());
     }
 
-    // getTeamById
+    // #endregion
+
+    // #region getTeamById
 
     @Test
     void testGetTeamById_shouldBeOk() throws Exception {
@@ -110,7 +112,9 @@ public class TeamControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // createTeam
+    // #endregion
+
+    // #region createTeam
 
     @Test
     void testCreateTeam_shouldBeOk() throws Exception {
@@ -133,17 +137,15 @@ public class TeamControllerTest {
     }
 
     @Test
-    void testCreateTeam_shouldBeBadRequest_withTheOmissionOfTheTeamName() throws Exception {
+    void testCreateTeam_shouldBeBadRequest_withoutData() throws Exception {
+        // Without teamName
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/v1/team")
                 .content("{\"playerIds\": [1, 2]}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testCreateTeam_shouldBeBadRequest_withTheOmissionOfThePlayerIds() throws Exception {
+        // Without list players
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/v1/team")
                 .content("{\"teamName\": \"T1\"")
@@ -151,4 +153,7 @@ public class TeamControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    // #endregion
+
 }
