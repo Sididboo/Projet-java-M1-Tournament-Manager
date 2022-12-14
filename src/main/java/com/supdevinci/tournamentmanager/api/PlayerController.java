@@ -20,6 +20,8 @@ import com.supdevinci.tournamentmanager.service.PlayerService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
+
 /**
  * Player controller.
  */
