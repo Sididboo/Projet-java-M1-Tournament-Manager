@@ -20,6 +20,8 @@ import com.supdevinci.tournamentmanager.service.PlayerService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
+
 /**
  * Player controller.
  */
@@ -98,7 +100,7 @@ public class PlayerController {
 
 
         Player updatedPlayer = playerService.savePlayer(player);
-        return ResponseEntity.ok(mapper.mapToDto(updatedPlayer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDto(updatedPlayer));
     }
 
 

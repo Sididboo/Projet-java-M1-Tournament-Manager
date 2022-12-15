@@ -44,8 +44,52 @@ public class PlayerControllerTest {
     @Autowired
     private TeamRepository teamRepository;
 
-    // getPlayers
+    /**
+     * Test POST Player
+     */
+    @Test
+    public void testCreatePlayer_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
 
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"pseudo\": \"P4\", \"postalAddress\": 24003}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        assertEquals(
+                "{\"id\":4,\"pseudo\":\"P4\"}",
+                mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePseudo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"postalAddress\": 24000}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePostalAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/team")
+                        .content("{\"pseudo\": \"P1\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * Test GET Player
+     */
     @Test
     void testGetPlayers_shouldBeOk() throws Exception {
         // Test data
@@ -60,8 +104,6 @@ public class PlayerControllerTest {
         assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
                 mvcResult.getResponse().getContentAsString());
     }
-
-    // getPlayerById
 
     @Test
     void testGetPlayerById_shouldBeOk() throws Exception {
@@ -93,47 +135,25 @@ public class PlayerControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Test PUT Player
+     */
     @Test
-    public void testCreatePlayer_shouldBeOk() throws Exception {
+    void testPutPlayersById_shouldBeOk() throws Exception{
         // Test data
         playerRepository.save(Constant.P1);
-        playerRepository.save(Constant.P2);
-        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/player")
-                        .content("{\"pseudo\": \"P4\", \"postalAddress\": 24003}")
+                        .put("/v1/player/1")
+                        .content("{\"id\":1,\"pseudo\":\"P1_bis\"}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
 
         assertEquals(
-                "{\"id\":4,\"pseudo\":\"P4\"}",
+                "{\"id\":1,\"pseudo\":\"P1_bis\"}",
                 mvcResult.getResponse().getContentAsString());
-
     }
-
-    @Test
-    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePseudo() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/player")
-                        .content("{\"postalAddress\": 24000}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePostalAddress() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/team")
-                        .content("{\"pseudo\": \"P1\"")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-
-
 }
