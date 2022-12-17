@@ -2,8 +2,8 @@ package com.supdevinci.tournamentmanager.api.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +12,10 @@ import lombok.Data;
 @Builder
 public class TeamCreateDto {
 
-    @NotBlank
-    String teamName;
+    @NotEmpty(message = "Team name may not be empty")
+    @NotNull(message = "Team name may not be null")
+    public String teamName;
 
-    @NotEmpty
-    List<Long> playerIds;
+    public List<Long> playerIds;
 
 }

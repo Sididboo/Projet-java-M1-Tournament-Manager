@@ -33,7 +33,7 @@ public class Player {
     @Column(unique = true, nullable = false)
     private String pseudo;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String postalAddress;
 
     @ManyToMany(mappedBy = "players")

@@ -103,7 +103,8 @@ public class PlayerController {
         player.setPseudo(playerDto.getPseudo());
 
         Player updatedPlayer = playerService.savePlayer(player);
-        return ResponseEntity.ok(mapper.mapToDetailDto(updatedPlayer));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDetailDto(updatedPlayer));
     }
 
 }

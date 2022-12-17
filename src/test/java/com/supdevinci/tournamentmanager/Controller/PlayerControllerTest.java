@@ -46,6 +46,52 @@ public class PlayerControllerTest {
 
     // #region getPlayers
 
+    /**
+     * Test POST Player
+     */
+    @Test
+    public void testCreatePlayer_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"pseudo\": \"P4\", \"postalAddress\": 24003}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        assertEquals(
+                "{\"id\":4,\"pseudo\":\"P4\"}",
+                mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePseudo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/player")
+                        .content("{\"postalAddress\": 24000}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePostalAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/team")
+                        .content("{\"pseudo\": \"P1\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * Test GET Player
+     */
     @Test
     void testGetPlayers_shouldBeOk() throws Exception {
         // Test data
@@ -107,10 +153,27 @@ public class PlayerControllerTest {
                 .content("{\"pseudo\": \"P1\", \"postalAddress\": 24000}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
+
+    /**
+     * Test PUT Player
+     */
+    @Test
+    void testPutPlayersById_shouldBeOk() throws Exception{
+        // Test data
+        playerRepository.save(Constant.P1);
+        teamRepository.save(Constant.T1);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .put("/v1/player/1")
+                        .content("{\"id\":1,\"pseudo\":\"P1_bis\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isCreated())
                 .andReturn();
 
         assertEquals(
+
                 "{\"id\":1,\"pseudo\":\"P1\",\"postalAddress\":\"24000\",\"teams\":null}",
                 mvcResult.getResponse().getContentAsString());
 
@@ -135,5 +198,7 @@ public class PlayerControllerTest {
     }
 
     // #endregion
-
+                "{\"id\":1,\"pseudo\":\"P1_bis\"}",
+                mvcResult.getResponse().getContentAsString());
+    }
 }
