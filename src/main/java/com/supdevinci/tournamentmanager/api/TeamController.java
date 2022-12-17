@@ -1,23 +1,19 @@
 package com.supdevinci.tournamentmanager.api;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.supdevinci.tournamentmanager.api.dto.*;
+import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.supdevinci.tournamentmanager.api.dto.TeamCreateDto;
-import com.supdevinci.tournamentmanager.api.dto.TeamDetailDto;
-import com.supdevinci.tournamentmanager.api.dto.TeamDto;
 import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
 import com.supdevinci.tournamentmanager.api.mapper.TeamMapper;
 import com.supdevinci.tournamentmanager.model.Player;
@@ -40,6 +36,22 @@ public class TeamController {
     private final TeamService teamService;
     private final TournamentService tournamentService;
     private final TeamMapper mapper;
+
+    /**
+     * Create team.
+     *
+     * @param teamCreateDto
+     * @return the details of team created
+     */
+    @PostMapping
+    public ResponseEntity<TeamDetailDto> createTeam(@RequestBody @Valid TeamCreateDto teamCreateDto) {
+        // Recovery of the players with the list of identifiers
+        List<Player> players = playerService.findPlayersByIds(teamCreateDto.getPlayerIds());
+
+        Team team = mapper.mapToEntity(teamCreateDto, players);
+        Team newTeam = teamService.saveTeam(team);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDetailDto(newTeam, 0));
+    }
 
     /**
      * Get all teams.
@@ -66,7 +78,7 @@ public class TeamController {
     public ResponseEntity<TeamDetailDto> getTeamById(@PathVariable(name = "id") Long id) {
         Optional<Team> team = teamService.findTeamById(id);
 
-        if (!team.isPresent()) {
+        if (team.isEmpty()) {
             throw new ResourceNotFoundException("Team", id);
         } else {
             Integer nbVictories = tournamentService.findNbVictoriesOfTeam(team.get());
@@ -76,19 +88,34 @@ public class TeamController {
     }
 
     /**
-     * Create team.
-     * 
-     * @param teamCreateDto
-     * @return the details of team created
+     * Update team.
+     *
+     * @param id
+     * @param teamUpdateDto
+     * @return update team
      */
-    @PostMapping
-    public ResponseEntity<TeamDetailDto> createTeam(@RequestBody @Valid TeamCreateDto teamCreateDto) {
-        // Recovery of the players with the list of identifiers
-        List<Player> players = playerService.findPlayersByIds(teamCreateDto.getPlayerIds());
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<TeamDto> updateTeam(
+            @PathVariable Long id,
+            @RequestBody TeamUpdateDto teamUpdateDto
 
-        Team team = mapper.mapToEntity(teamCreateDto, players);
-        Team newTeam = teamService.saveTeam(team);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDetailDto(newTeam, 0));
+    ) {
+        Optional<Team> optionalTeam = teamService.findTeamById(id);
+        if (optionalTeam.isEmpty()) {
+            throw new ResourceNotFoundException("Team", id);
+        }
+
+        if (!Objects.equals(id, teamUpdateDto.getId())) {
+            throw new IdMismatchException(id, teamUpdateDto.getId());
+        }
+
+        List<Player> players = playerService.findPlayersByIds(teamUpdateDto.getPlayerIds());
+        Team team = optionalTeam.get();
+        team.setTeamName(teamUpdateDto.getTeamName());
+        team.setPlayers(new ArrayList<>(players));
+
+        Team updatedTeam = teamService.saveTeam(team);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDto(updatedTeam));
     }
 
 }
