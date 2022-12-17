@@ -100,7 +100,7 @@ public class PlayerController {
 
 
         Player updatedPlayer = playerService.savePlayer(player);
-        return ResponseEntity.ok(mapper.mapToDto(updatedPlayer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDto(updatedPlayer));
     }
 
 
