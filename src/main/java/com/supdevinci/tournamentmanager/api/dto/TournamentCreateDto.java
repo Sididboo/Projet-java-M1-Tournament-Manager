@@ -1,20 +1,26 @@
 package com.supdevinci.tournamentmanager.api.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class TeamCreateDto {
+public class TournamentCreateDto {
 
     @NotBlank
-    public String teamName;
+    String subject;
+    @NotBlank
+    String description;
+    @NotNull
+    Date dateBegin;
     @NotEmpty
-    public List<Long> playerIds;
+    List<Long> teamIds;
 
 }

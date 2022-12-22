@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.Assert;
+
 // Save this imports
 /* 
 import static org.junit.Assert.assertEquals;
@@ -26,13 +28,13 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
 import com.supdevinci.tournamentmanager.repository.StateRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
 import com.supdevinci.tournamentmanager.repository.TournamentRepository;
+import com.supdevinci.tournamentmanager.util.MockRequest;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,6 +52,8 @@ public class TeamControllerTest {
     private StateRepository stateRepository;
     @Autowired
     private TournamentRepository tournamentRepository;
+
+    final String URL_TEMPLATE = "/v1/team";
 
     // #region getTeams
 
@@ -122,13 +126,11 @@ public class TeamControllerTest {
         playerRepository.save(Constant.P1);
         playerRepository.save(Constant.P2);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/team")
-                .content("{\"teamName\": \"T1\", \"playerIds\": [1, 2]}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andReturn();
+        MvcResult mvcResult = MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"teamName\": \"T1\", \"playerIds\": [1, 2]}",
+                status().isCreated());
 
         assertEquals(
                 "{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}],\"nbVictories\":0}",
@@ -139,19 +141,20 @@ public class TeamControllerTest {
     @Test
     void testCreateTeam_shouldBeBadRequest_withoutData() throws Exception {
         // Without teamName
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/team")
-                .content("{\"playerIds\": [1, 2]}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"playerIds\": [1, 2]}",
+                status().isBadRequest());
         // Without list players
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/team")
-                .content("{\"teamName\": \"T1\"")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"teamName\": \"T1\"",
+                status().isBadRequest());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
     }
 
     // #endregion
