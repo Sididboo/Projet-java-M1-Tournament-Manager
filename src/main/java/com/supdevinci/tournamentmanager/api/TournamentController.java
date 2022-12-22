@@ -39,7 +39,6 @@ public class TournamentController {
     /**
      * Create team.
      * 
-     * @param teamCreateDto
      * @return the details of team created
      */
     @PostMapping
