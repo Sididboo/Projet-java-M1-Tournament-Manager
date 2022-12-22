@@ -3,8 +3,6 @@ package com.supdevinci.tournamentmanager.Controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 // Save this imports
 /* 
 import static org.junit.Assert.assertEquals;
@@ -13,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; 
 */
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,12 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.supdevinci.tournamentmanager.util.MockRequest;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,52 +45,46 @@ public class PlayerControllerTest {
     @Autowired
     private TeamRepository teamRepository;
 
-    /**
-     * Test POST Player
-     */
+    final String URL_TEMPLATE = "/v1/player";
+
+    // #region createPlayer
+
     @Test
     public void testCreatePlayer_shouldBeOk() throws Exception {
-        // Test data
-        playerRepository.save(Constant.P1);
-        playerRepository.save(Constant.P2);
-        playerRepository.save(Constant.P3);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/player")
-                        .content("{\"pseudo\": \"P4\", \"postalAddress\": 24003}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andReturn();
+        MvcResult mvcResult = MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"pseudo\": \"P1\", \"postalAddress\": 24000}",
+                status().isCreated());
 
         assertEquals(
-                "{\"id\":4,\"pseudo\":\"P4\"}",
+                "{\"id\":1,\"pseudo\":\"P1\",\"postalAddress\":\"24000\",\"teams\":null}",
                 mvcResult.getResponse().getContentAsString());
     }
 
     @Test
-    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePseudo() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/player")
-                        .content("{\"postalAddress\": 24000}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+    void testCreatePlayer_whenForgotParams_shouldBeBadRequest() throws Exception {
+        // Without speudo
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"postalAddress\": 24000}",
+                status().isBadRequest());
+        // Without postalAddress
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"pseudo\": \"P1\"",
+                status().isBadRequest());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
     }
 
-    @Test
-    void testCreatePlayer_shouldBeBadRequest_withTheOmissionOfThePostalAddress() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/team")
-                        .content("{\"pseudo\": \"P1\"}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
+    // #endregion
 
-    /**
-     * Test GET Player
-     */
+    // #region getPlayers
+
     @Test
     void testGetPlayers_shouldBeOk() throws Exception {
         // Test data
@@ -104,6 +99,10 @@ public class PlayerControllerTest {
         assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
                 mvcResult.getResponse().getContentAsString());
     }
+
+    // #endregion
+
+    // #region getPlayerById
 
     @Test
     void testGetPlayerById_shouldBeOk() throws Exception {
@@ -135,25 +134,31 @@ public class PlayerControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /**
-     * Test PUT Player
-     */
+    // #endregion
+
+    // #region updatePlayer
+
     @Test
-    void testPutPlayersById_shouldBeOk() throws Exception{
+    void testUpdatePlayer_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
         teamRepository.save(Constant.T1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .put("/v1/player/1")
-                        .content("{\"id\":1,\"pseudo\":\"P1_bis\"}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                .put("/v1/player/1")
+                .content("{\"id\":1,\"pseudo\":\"P1\"}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isCreated())
                 .andReturn();
 
         assertEquals(
-                "{\"id\":1,\"pseudo\":\"P1_bis\"}",
+
+                "{\"id\":1,\"pseudo\":\"P1\",\"postalAddress\":\"24000\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"}]}",
                 mvcResult.getResponse().getContentAsString());
+
     }
+
+    // #endregion
 }

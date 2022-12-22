@@ -31,4 +31,13 @@ public interface TeamService {
      * @return one team
      */
     Optional<Team> findTeamById(Long id);
+
+    /**
+     * 
+     * Find teams with list of identifiers.
+     * 
+     * @param ids
+     * @return list of teams
+     */
+    List<Team> findTeamsByIds(List<Long> ids);
 }

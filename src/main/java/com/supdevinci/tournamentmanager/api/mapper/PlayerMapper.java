@@ -20,9 +20,12 @@ public interface PlayerMapper {
 
     PlayerDetailDto mapToDetailDto(Player player);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "teams", ignore = true)
     Player mapToEntity(PlayerCreateDto playerCreateDto);
 
-    // This mapper will be automatically detected if another mapper needs to map the same type
+    // This mapper will be automatically detected if another mapper needs to map the
+    // same type
     @Mapping(target = "players", ignore = true)
     TeamDto mapToTeamDto(Team team);
 

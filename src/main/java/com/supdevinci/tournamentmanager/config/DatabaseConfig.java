@@ -98,6 +98,7 @@ public class DatabaseConfig {
             properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
             properties.setProperty("hibernate.show_sql", "true");
+            properties.setProperty("hibernate.hbm2ddl.charset_name", "UTF-8");
 
             return properties;
 
@@ -106,6 +107,7 @@ public class DatabaseConfig {
             properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
             properties.setProperty("hibernate.show_sql", "true");
+            properties.setProperty("hibernate.hbm2ddl.charset_name", "UTF-8");
 
             return properties;
         }

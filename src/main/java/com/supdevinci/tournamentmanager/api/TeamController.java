@@ -24,9 +24,6 @@ import com.supdevinci.tournamentmanager.service.TournamentService;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * Team controller.
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/v1/team", produces = MediaType.APPLICATION_JSON_VALUE)
