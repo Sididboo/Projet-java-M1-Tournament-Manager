@@ -9,6 +9,8 @@ import com.supdevinci.tournamentmanager.service.TournamentService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 /**
  * Service to interact with the database with the table tournament.
  */
@@ -26,6 +28,11 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public Integer findNbVictoriesOfTeam(Team team) {
         return tournamentRepository.findNbVictoriesOfTeam(team);
+    }
+
+    @Override
+    public List<Tournament> findAllTournament() {
+        return tournamentRepository.findAll();
     }
 
 }

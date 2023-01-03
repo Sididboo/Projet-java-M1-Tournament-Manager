@@ -5,13 +5,12 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+
+import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.supdevinci.tournamentmanager.api.dto.TournamentCreateDto;
 import com.supdevinci.tournamentmanager.api.dto.TournamentDetailDto;
@@ -37,9 +36,9 @@ public class TournamentController {
     private final TournamentMapper mapper;
 
     /**
-     * Create team.
+     * Create tournament.
      * 
-     * @param teamCreateDto
+     * @param tournamentCreateDto
      * @return the details of team created
      */
     @PostMapping
@@ -60,6 +59,21 @@ public class TournamentController {
 
         Tournament newTournament = tournamentService.saveTournament(tournament);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDetailDto(newTournament));
+    }
+
+    /**
+     * Get all tournament.
+     *
+     * @return the list of tournament
+     */
+    @GetMapping
+    public ResponseEntity<List<TournamentDto>> getTournament() {
+        return ResponseEntity
+                .ok(tournamentService
+                        .findAllTournament()
+                        .stream()
+                        .map(mapper::mapToDto)
+                        .toList());
     }
 
 }
