@@ -37,9 +37,9 @@ public class TournamentController {
     private final TournamentMapper mapper;
 
     /**
-     * Create team.
+     * Create tournament.
      * 
-     * @param teamCreateDto
+     * @param tournamentCreateDto
      * @return the details of team created
      */
     @PostMapping
