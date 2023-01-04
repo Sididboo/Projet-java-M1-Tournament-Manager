@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
+import com.supdevinci.tournamentmanager.repository.TournamentRepository;
 import com.supdevinci.tournamentmanager.util.MockRequest;
 
 @RunWith(SpringRunner.class)
@@ -32,6 +33,8 @@ public class TournamentControllerTest {
     private PlayerRepository playerRepository;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     final String URL_TEMPLATE = "/v1/tournament";
 
@@ -90,4 +93,143 @@ public class TournamentControllerTest {
 
     // #endregion
 
+    // #region updateTournament
+
+    @Test
+    void testUpdateTournament_whenStateIsThree_shouldBeOk() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MvcResult mvcResult = MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1, \"stateId\": 3, \"winningTeamId\": 1}",
+                status().isCreated());
+
+        assertEquals(
+                "{\"id\":1,\"subject\":\"TO1\",\"description\":\"TO1 Desc\",\"nameState\":\"TerminÃ©\",\"dateBegin\":\"2014-02-10T23:00:00.000+00:00\",\"teams\":[]}",
+                mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateTournament_whenStateIsLowerThanThree_shouldBeOk() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MvcResult mvcResult = MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1, \"stateId\": 2}",
+                status().isCreated());
+
+        assertEquals(
+                "{\"id\":1,\"subject\":\"TO1\",\"description\":\"TO1 Desc\",\"nameState\":\"En Cours\",\"dateBegin\":\"2014-02-10T23:00:00.000+00:00\",\"teams\":[]}",
+                mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateTournament_whenTournamentNotExist_shouldBeNotFound() throws Exception {
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1, \"stateId\": 2}",
+                status().isNotFound());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    void testUpdateTournament_whenForgotParams_shouldBeBadRequest() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        // Without id
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"stateId\": 2}",
+                status().isBadRequest());
+
+        // Without stateId
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1}",
+                status().isBadRequest());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    void testUpdateTournament_whenIdMismatch_shouldBeBadRequest() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 2}",
+                status().isBadRequest());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    void testUpdateTournament_whenStateNotFound_shouldBeBadRequest() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1, \"stateId\": 4, \"winningTeamId\": 1}",
+                status().isNotFound());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    void testUpdateTournament_whenWinningTeamNotFound_shouldBeNotFound() throws Exception {
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MockRequest.mockPutRequest(
+                mockMvc,
+                URL_TEMPLATE + "/1",
+                "{\"id\": 1, \"stateId\": 4, \"winningTeamId\": 4}",
+                status().isNotFound());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+
+    // #endregion
 }

@@ -1,9 +1,10 @@
 package com.supdevinci.tournamentmanager.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.supdevinci.tournamentmanager.model.Team;
 import com.supdevinci.tournamentmanager.model.Tournament;
-
-import java.util.List;
 
 /**
  * Interface for TournamentServiceImpl.
@@ -32,5 +33,13 @@ public interface TournamentService {
      * @return all tournament.
      */
     List<Tournament> findAllTournament();
+
+    /**
+     * Find one tournament by id.
+     * 
+     * @param id
+     * @return one tournament
+     */
+    Optional<Tournament> findTournamentById(Long id);
 
 }

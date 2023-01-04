@@ -45,4 +45,26 @@ public class MockRequest {
                 .andReturn();
     }
 
+    /**
+     * Mock put request.
+     * 
+     * @param mockMvc
+     * @param urlTemplate
+     * @param content
+     * @param httpStatus
+     * @return response of request
+     * @throws Exception
+     */
+    public static MvcResult mockPutRequest(MockMvc mockMvc, String urlTemplate, String content,
+            ResultMatcher httpStatus) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
+                .put(urlTemplate)
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(httpStatus)
+                .andDo(print())
+                .andReturn();
+    }
+
 }
