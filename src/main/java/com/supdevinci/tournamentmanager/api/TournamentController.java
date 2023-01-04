@@ -37,9 +37,10 @@ public class TournamentController {
     private final TournamentMapper mapper;
 
     /**
-     * Create team.
+     * Create tournament.
      * 
-     * @return the details of team created
+     * @param tournamentCreateDto
+     * @return the details of tournament created
      */
     @PostMapping
     public ResponseEntity<TournamentDetailDto> createTournament(
