@@ -40,7 +40,7 @@ public class TournamentController {
      * Create tournament.
      * 
      * @param tournamentCreateDto
-     * @return the details of team created
+     * @return the details of tournament created
      */
     @PostMapping
     public ResponseEntity<TournamentDetailDto> createTournament(
