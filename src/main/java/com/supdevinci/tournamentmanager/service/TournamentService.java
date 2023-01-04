@@ -3,6 +3,8 @@ package com.supdevinci.tournamentmanager.service;
 import com.supdevinci.tournamentmanager.model.Team;
 import com.supdevinci.tournamentmanager.model.Tournament;
 
+import java.util.List;
+
 /**
  * Interface for TournamentServiceImpl.
  */
@@ -23,5 +25,12 @@ public interface TournamentService {
      * @return number of victories
      */
     Integer findNbVictoriesOfTeam(Team team);
+
+    /**
+     * Find all tournament.
+     *
+     * @return all tournament.
+     */
+    List<Tournament> findAllTournament();
 
 }

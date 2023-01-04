@@ -2,6 +2,7 @@ package com.supdevinci.tournamentmanager.api.mapper;
 
 import java.util.List;
 
+import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,6 +17,10 @@ import com.supdevinci.tournamentmanager.model.Tournament;
  */
 @Mapper(componentModel = "spring")
 public interface TournamentMapper {
+
+
+    TournamentDto mapToDto(Tournament tournament);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "winningTeam", ignore = true)
