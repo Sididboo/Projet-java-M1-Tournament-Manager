@@ -2,7 +2,8 @@ package com.supdevinci.tournamentmanager.constant;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import com.supdevinci.tournamentmanager.model.Player;
 import com.supdevinci.tournamentmanager.model.State;
@@ -25,10 +26,25 @@ public class Constant {
     public static State S2 = new State(2L, "En Cours");
     public static State S3 = new State(3L, "Terminé");
     // Tournament
-    public static Tournament TO1 = new Tournament(1L, "TO1", "TO1 Desc", new Timestamp(new Date().getTime()), S1,
+    public static Tournament TO1 = new Tournament(
+            1L,
+            "TO1",
+            "TO1 Desc",
+            new Timestamp(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime().getTime()),
+            S1,
             Arrays.asList(T1, T2));
-    public static Tournament TO2 = new Tournament(2L, "TO2", "TO2 Desc", new Timestamp(new Date().getTime()), S2,
+    public static Tournament TO2 = new Tournament(
+            2L,
+            "TO2",
+            "TO2 Desc",
+            new Timestamp(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime().getTime()),
+            S2,
             Arrays.asList(T1, T2));
-    public static Tournament TO3 = new Tournament(3L, "TO3", "TO3 Desc", new Timestamp(new Date().getTime()), S3,
+    public static Tournament TO3 = new Tournament(
+            3L,
+            "TO3",
+            "TO3 Desc",
+            new Timestamp(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime().getTime()),
+            S3,
             Arrays.asList(T1, T2), T1);
 }
