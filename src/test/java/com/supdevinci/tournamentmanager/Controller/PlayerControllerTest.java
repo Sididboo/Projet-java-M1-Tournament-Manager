@@ -48,13 +48,12 @@ public class PlayerControllerTest {
     final String URL_TEMPLATE = "/v1/player";
 
     // #region createPlayer
-
     @Test
     public void testCreatePlayer_shouldBeOk() throws Exception {
         MvcResult mvcResult = MockRequest.mockPostRequest(
                 mockMvc,
                 URL_TEMPLATE,
-                "{\"pseudo\": \"P1\", \"postalAddress\": 24000}",
+                "{\"pseudo\":\"P1\",\"postalAddress\":24000}",
                 status().isCreated());
 
         assertEquals(
@@ -64,7 +63,7 @@ public class PlayerControllerTest {
 
     @Test
     void testCreatePlayer_whenForgotParams_shouldBeBadRequest() throws Exception {
-        // Without speudo
+        // Without pseudo
         MockRequest.mockPostRequest(
                 mockMvc,
                 URL_TEMPLATE,
@@ -80,18 +79,16 @@ public class PlayerControllerTest {
         // Need one assert to remove warning in this method
         Assert.assertTrue(true);
     }
-
     // #endregion
 
     // #region getPlayers
-
     @Test
     void testGetPlayers_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
         playerRepository.save(Constant.P2);
 
-        MvcResult mvcResult = mockMvc.perform(get("/v1/player"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -99,18 +96,16 @@ public class PlayerControllerTest {
         assertEquals("[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]",
                 mvcResult.getResponse().getContentAsString());
     }
-
     // #endregion
 
     // #region getPlayerById
-
     @Test
     void testGetPlayerById_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
         teamRepository.save(Constant.T1);
 
-        MvcResult mvcResult = mockMvc.perform(get("/v1/player/1"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE+"/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -121,7 +116,7 @@ public class PlayerControllerTest {
 
     @Test
     void testGetPlayerById_shouldBeNotFound() throws Exception {
-        mockMvc.perform(get("/v1/player/1"))
+        mockMvc.perform(get(URL_TEMPLATE+"/1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -130,14 +125,12 @@ public class PlayerControllerTest {
         // Test data
         playerRepository.save(Constant.P1);
 
-        mockMvc.perform(get("/v1/player/aError400"))
+        mockMvc.perform(get(URL_TEMPLATE+"/aError400"))
                 .andExpect(status().isBadRequest());
     }
-
     // #endregion
 
     // #region updatePlayer
-
     @Test
     void testUpdatePlayer_shouldBeOk() throws Exception {
         // Test data
@@ -145,7 +138,7 @@ public class PlayerControllerTest {
         teamRepository.save(Constant.T1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/player/1")
+                .put(URL_TEMPLATE+"/1")
                 .content("{\"id\":1,\"pseudo\":\"P1\"}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -159,6 +152,5 @@ public class PlayerControllerTest {
                 mvcResult.getResponse().getContentAsString());
 
     }
-
     // #endregion
 }

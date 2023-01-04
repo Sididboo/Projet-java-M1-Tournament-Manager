@@ -35,6 +35,7 @@ import com.supdevinci.tournamentmanager.repository.StateRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
 import com.supdevinci.tournamentmanager.repository.TournamentRepository;
 import com.supdevinci.tournamentmanager.util.MockRequest;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -55,8 +56,46 @@ public class TeamControllerTest {
 
     final String URL_TEMPLATE = "/v1/team";
 
-    // #region getTeams
+    // #region createTeam
+    @Test
+    void testCreateTeam_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
 
+        MvcResult mvcResult = MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"teamName\":\"T1\",\"playerIds\":[1,2]}",
+                status().isCreated());
+
+        assertEquals(
+                "{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}],\"nbVictories\":0}",
+                mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void testCreateTeam_shouldBeBadRequest_withoutData() throws Exception {
+        // Without teamName
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"playerIds\":[1,2]}",
+                status().isBadRequest());
+        // Without list players
+        MockRequest.mockPostRequest(
+                mockMvc,
+                URL_TEMPLATE,
+                "{\"teamName\":\"T1\"}",
+                status().isBadRequest());
+
+        // Need one assert to remove warning in this method
+        Assert.assertTrue(true);
+    }
+    // #endregion
+
+    // #region getTeams
     @Test
     void testGetTeams_shouldBeOk() throws Exception {
         // Test data
@@ -66,7 +105,7 @@ public class TeamControllerTest {
         teamRepository.save(Constant.T1);
         teamRepository.save(Constant.T2);
 
-        MvcResult mvcResult = mockMvc.perform(get("/v1/team"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -75,11 +114,9 @@ public class TeamControllerTest {
                 "[{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"}]},{\"id\":2,\"teamName\":\"T2\",\"players\":[{\"id\":2,\"pseudo\":\"P2\"},{\"id\":3,\"pseudo\":\"P3\"}]}]",
                 mvcResult.getResponse().getContentAsString());
     }
-
     // #endregion
 
     // #region getTeamById
-
     @Test
     void testGetTeamById_shouldBeOk() throws Exception {
         // Test data
@@ -95,7 +132,7 @@ public class TeamControllerTest {
         tournamentRepository.save(Constant.TO2);
         tournamentRepository.save(Constant.TO3);
 
-        MvcResult mvcResult = mockMvc.perform(get("/v1/team/1"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE+"/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -106,57 +143,39 @@ public class TeamControllerTest {
 
     @Test
     void testGetTeamById_shouldBeNotFound() throws Exception {
-        mockMvc.perform(get("/v1/team/1"))
+        mockMvc.perform(get(URL_TEMPLATE+"/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void testGetTeamById_shouldBeBadRequest() throws Exception {
-        mockMvc.perform(get("/v1/team/ee"))
+        mockMvc.perform(get(URL_TEMPLATE+"/aError400"))
                 .andExpect(status().isBadRequest());
     }
-
     // #endregion
 
-    // #region createTeam
-
+    // #region updatePlayer
     @Test
-    void testCreateTeam_shouldBeOk() throws Exception {
+    void testUpdateTeam_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
         playerRepository.save(Constant.P2);
+        teamRepository.save(Constant.T1);
 
-        MvcResult mvcResult = MockRequest.mockPostRequest(
-                mockMvc,
-                URL_TEMPLATE,
-                "{\"teamName\": \"T1\", \"playerIds\": [1, 2]}",
-                status().isCreated());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .put(URL_TEMPLATE+"/1")
+                        .content("{\"id\":1,\"teamName\":\"P1_bis\",\"playerIds\":[1,2]}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isCreated())
+                .andReturn();
 
         assertEquals(
-                "{\"id\":1,\"teamName\":\"T1\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}],\"nbVictories\":0}",
+
+                "{\"id\":1,\"teamName\":\"P1_bis\",\"players\":[{\"id\":1,\"pseudo\":\"P1\"},{\"id\":2,\"pseudo\":\"P2\"}]}",
                 mvcResult.getResponse().getContentAsString());
 
     }
-
-    @Test
-    void testCreateTeam_shouldBeBadRequest_withoutData() throws Exception {
-        // Without teamName
-        MockRequest.mockPostRequest(
-                mockMvc,
-                URL_TEMPLATE,
-                "{\"playerIds\": [1, 2]}",
-                status().isBadRequest());
-        // Without list players
-        MockRequest.mockPostRequest(
-                mockMvc,
-                URL_TEMPLATE,
-                "{\"teamName\": \"T1\"",
-                status().isBadRequest());
-
-        // Need one assert to remove warning in this method
-        Assert.assertTrue(true);
-    }
-
     // #endregion
-
 }
