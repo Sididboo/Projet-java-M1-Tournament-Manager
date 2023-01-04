@@ -107,7 +107,6 @@ http://localhost:8080
   "postalAddress":"..."
 }
 ```
-
 #### <a name="2"></a>Joueur Json PUT
 ```
 {

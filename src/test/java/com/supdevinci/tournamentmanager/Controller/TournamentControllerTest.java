@@ -15,15 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-// Save this imports
-/* 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; 
-*/
-
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
-import com.supdevinci.tournamentmanager.repository.StateRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
 import com.supdevinci.tournamentmanager.util.MockRequest;
 
@@ -39,8 +32,6 @@ public class TournamentControllerTest {
     private PlayerRepository playerRepository;
     @Autowired
     private TeamRepository teamRepository;
-    @Autowired
-    private StateRepository stateRepository;
 
     final String URL_TEMPLATE = "/v1/tournament";
 
@@ -54,7 +45,6 @@ public class TournamentControllerTest {
         playerRepository.save(Constant.P3);
         teamRepository.save(Constant.T1);
         teamRepository.save(Constant.T2);
-        stateRepository.save(Constant.S1);
 
         MvcResult mvcResult = MockRequest.mockPostRequest(
                 mockMvc,
@@ -64,26 +54,6 @@ public class TournamentControllerTest {
 
         assertEquals(
                 "{\"id\":1,\"subject\":\"Tennis\",\"description\":\"Match de Tennis\",\"nameState\":\"PlanifiÃ©\",\"dateBegin\":\"2022-03-11T00:00:00.000+00:00\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"},{\"id\":2,\"teamName\":\"T2\"}]}",
-                mvcResult.getResponse().getContentAsString());
-    }
-
-    @Test
-    void testCreateTournament_WhenStateNotCreated_shouldReturnInternalServerErrorException() throws Exception {
-
-        playerRepository.save(Constant.P1);
-        playerRepository.save(Constant.P2);
-        playerRepository.save(Constant.P3);
-        teamRepository.save(Constant.T1);
-        teamRepository.save(Constant.T2);
-
-        MvcResult mvcResult = MockRequest.mockPostRequest(
-                mockMvc,
-                URL_TEMPLATE,
-                "{\"subject\": \"Tennis\", \"description\": \"Match de Tennis\", \"dateBegin\": \"2022-03-11\", \"teamIds\": [1,2]}",
-                status().isInternalServerError());
-
-        assertEquals(
-                "{\"code\":500,\"status\":\"Internal Server Error\",\"message\":\"It is possible that the tournament states are not created\",\"error\":\"INTERNAL_SERVER_ERROR\"}",
                 mvcResult.getResponse().getContentAsString());
     }
 

@@ -6,17 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Assert;
-
-// Save this imports
-/* 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; 
-*/
-
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +17,13 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.supdevinci.tournamentmanager.constant.Constant;
 import com.supdevinci.tournamentmanager.repository.PlayerRepository;
-import com.supdevinci.tournamentmanager.repository.StateRepository;
 import com.supdevinci.tournamentmanager.repository.TeamRepository;
 import com.supdevinci.tournamentmanager.repository.TournamentRepository;
 import com.supdevinci.tournamentmanager.util.MockRequest;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -49,8 +37,6 @@ public class TeamControllerTest {
     private PlayerRepository playerRepository;
     @Autowired
     private TeamRepository teamRepository;
-    @Autowired
-    private StateRepository stateRepository;
     @Autowired
     private TournamentRepository tournamentRepository;
 
@@ -125,14 +111,11 @@ public class TeamControllerTest {
         playerRepository.save(Constant.P3);
         teamRepository.save(Constant.T1);
         teamRepository.save(Constant.T2);
-        stateRepository.save(Constant.S1);
-        stateRepository.save(Constant.S2);
-        stateRepository.save(Constant.S3);
         tournamentRepository.save(Constant.TO1);
         tournamentRepository.save(Constant.TO2);
         tournamentRepository.save(Constant.TO3);
 
-        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE+"/1"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -143,13 +126,13 @@ public class TeamControllerTest {
 
     @Test
     void testGetTeamById_shouldBeNotFound() throws Exception {
-        mockMvc.perform(get(URL_TEMPLATE+"/1"))
+        mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void testGetTeamById_shouldBeBadRequest() throws Exception {
-        mockMvc.perform(get(URL_TEMPLATE+"/aError400"))
+        mockMvc.perform(get(URL_TEMPLATE + "/aError400"))
                 .andExpect(status().isBadRequest());
     }
     // #endregion
@@ -163,10 +146,10 @@ public class TeamControllerTest {
         teamRepository.save(Constant.T1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .put(URL_TEMPLATE+"/1")
-                        .content("{\"id\":1,\"teamName\":\"P1_bis\",\"playerIds\":[1,2]}")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                .put(URL_TEMPLATE + "/1")
+                .content("{\"id\":1,\"teamName\":\"P1_bis\",\"playerIds\":[1,2]}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isCreated())
                 .andReturn();
