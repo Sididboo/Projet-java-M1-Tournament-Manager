@@ -13,4 +13,4 @@ Dans le fichier .env -> mettre une autre valeur que prod
 ### Paramètre d'intéraction avec la BDD :
 Changer la(les) valeur(s) des paramètres pour l'intéraction avec la BDD dans la class DatabaseConfig :
 
-"hibernate.hbm2ddl.auto" -> "create-drop", "none" ou autre valuer à votre convenance.
+"hibernate.hbm2ddl.auto" -> "create-drop", "none" ou autre valeur à votre convenance.
