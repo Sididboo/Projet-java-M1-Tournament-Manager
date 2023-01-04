@@ -3,14 +3,6 @@ package com.supdevinci.tournamentmanager.Controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-// Save this imports
-/* 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; 
-*/
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Assert;
@@ -105,7 +97,7 @@ public class PlayerControllerTest {
         playerRepository.save(Constant.P1);
         teamRepository.save(Constant.T1);
 
-        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE+"/1"))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -116,7 +108,7 @@ public class PlayerControllerTest {
 
     @Test
     void testGetPlayerById_shouldBeNotFound() throws Exception {
-        mockMvc.perform(get(URL_TEMPLATE+"/1"))
+        mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -125,7 +117,7 @@ public class PlayerControllerTest {
         // Test data
         playerRepository.save(Constant.P1);
 
-        mockMvc.perform(get(URL_TEMPLATE+"/aError400"))
+        mockMvc.perform(get(URL_TEMPLATE + "/aError400"))
                 .andExpect(status().isBadRequest());
     }
     // #endregion
@@ -138,7 +130,7 @@ public class PlayerControllerTest {
         teamRepository.save(Constant.T1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                .put(URL_TEMPLATE+"/1")
+                .put(URL_TEMPLATE + "/1")
                 .content("{\"id\":1,\"pseudo\":\"P1\"}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
