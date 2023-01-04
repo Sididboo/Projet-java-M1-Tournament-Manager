@@ -1,20 +1,30 @@
 package com.supdevinci.tournamentmanager.api;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-
-import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.supdevinci.tournamentmanager.api.dto.TournamentCreateDto;
 import com.supdevinci.tournamentmanager.api.dto.TournamentDetailDto;
+import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
+import com.supdevinci.tournamentmanager.api.dto.TournamentUpdateDto;
+import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
 import com.supdevinci.tournamentmanager.api.exception.InternalServerErrorException;
+import com.supdevinci.tournamentmanager.api.exception.MissedTeamException;
+import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
 import com.supdevinci.tournamentmanager.api.mapper.TournamentMapper;
 import com.supdevinci.tournamentmanager.model.State;
 import com.supdevinci.tournamentmanager.model.Team;
@@ -74,6 +84,58 @@ public class TournamentController {
                         .stream()
                         .map(mapper::mapToDto)
                         .toList());
+    }
+
+    /**
+     * Update tournament state.
+     *
+     * @param id                  tournament identifier
+     * @param tournamentUpdateDto
+     * @return update tournament
+     */
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<TournamentDetailDto> updateTournament(
+            @PathVariable Long id,
+            @Valid @RequestBody TournamentUpdateDto tournamentUpdateDto
+
+    ) {
+        // Get tournament
+        Optional<Tournament> optionalTournament = tournamentService.findTournamentById(id);
+        if (optionalTournament.isEmpty()) {
+            throw new ResourceNotFoundException("Tournament", id);
+        }
+
+        // Id in path should be equals to tournament id in body
+        if (!Objects.equals(id, tournamentUpdateDto.getId())) {
+            throw new IdMismatchException(id, tournamentUpdateDto.getId());
+        }
+
+        // Get state
+        Optional<State> optionalState = stateService.findStateById(tournamentUpdateDto.getStateId());
+        if (!optionalState.isPresent()) {
+            throw new ResourceNotFoundException("State", tournamentUpdateDto.getStateId());
+        }
+
+        Tournament tournament = optionalTournament.get();
+        tournament.setState(optionalState.get());
+
+        // If the status identifier is 3 ("Completed") then a team is required
+        if (tournamentUpdateDto.getId() == 3 && tournamentUpdateDto.getWinningTeamId() == null) {
+            throw new MissedTeamException(tournamentUpdateDto.getStateId());
+        }
+
+        // Get winning team
+        if (tournamentUpdateDto.getWinningTeamId() != null) {
+            Optional<Team> optionalTeam = teamService.findTeamById(tournamentUpdateDto.getWinningTeamId());
+            if (!optionalTeam.isPresent()) {
+                throw new ResourceNotFoundException("Team", tournamentUpdateDto.getWinningTeamId());
+            }
+
+            tournament.setWinningTeam(optionalTeam.get());
+        }
+
+        Tournament updatedTournament = tournamentService.saveTournament(tournament);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDetailDto(updatedTournament));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.supdevinci.tournamentmanager.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.supdevinci.tournamentmanager.model.Team;
@@ -8,8 +11,6 @@ import com.supdevinci.tournamentmanager.repository.TournamentRepository;
 import com.supdevinci.tournamentmanager.service.TournamentService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 /**
  * Service to interact with the database with the table tournament.
@@ -33,6 +34,11 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public List<Tournament> findAllTournament() {
         return tournamentRepository.findAll();
+    }
+
+    @Override
+    public Optional<Tournament> findTournamentById(Long id) {
+        return tournamentRepository.findById(id);
     }
 
 }
