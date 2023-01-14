@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -44,6 +45,7 @@ public class TournamentControllerTest {
         // #region createTournament
 
         @Test
+        @WithMockUser(username = "admin")
         void testCreateTournament_shouldBeOk() throws Exception {
 
                 playerRepository.save(Constant.P1);
@@ -64,6 +66,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testCreateTournament_WhenForgotParams_shouldReturnBadRequest() throws Exception {
                 // Without subjet
                 MockRequest.mockPostRequest(
@@ -99,6 +102,7 @@ public class TournamentControllerTest {
         // #region getTournament
 
         @Test
+        @WithMockUser(username = "user")
         void testGetTournament_shouldBeOk() throws Exception {
                 // Test data
                 playerRepository.save(Constant.P1);
@@ -120,6 +124,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "user")
         void testGetTournamentById_shouldBeOk() throws Exception {
                 // Test data
                 playerRepository.save(Constant.P1);
@@ -142,6 +147,7 @@ public class TournamentControllerTest {
         // #region updateTournament
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenStateIsThree_shouldBeOk() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);
@@ -162,6 +168,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenStateIsLowerThanThree_shouldBeOk() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);
@@ -182,6 +189,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenTournamentNotExist_shouldBeNotFound() throws Exception {
                 MockRequest.mockPutRequest(
                                 mockMvc,
@@ -194,6 +202,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenForgotParams_shouldBeBadRequest() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);
@@ -221,6 +230,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenIdMismatch_shouldBeBadRequest() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);
@@ -240,6 +250,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenStateNotFound_shouldBeBadRequest() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);
@@ -259,6 +270,7 @@ public class TournamentControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "admin")
         void testUpdateTournament_whenWinningTeamNotFound_shouldBeNotFound() throws Exception {
                 playerRepository.save(Constant.P1);
                 playerRepository.save(Constant.P2);

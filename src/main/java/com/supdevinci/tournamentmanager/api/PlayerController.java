@@ -26,11 +26,13 @@ import com.supdevinci.tournamentmanager.api.mapper.PlayerMapper;
 import com.supdevinci.tournamentmanager.model.Player;
 import com.supdevinci.tournamentmanager.service.PlayerService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/v1/player", produces = MediaType.APPLICATION_JSON_VALUE)
+@SecurityRequirement(name = "javainuseapi")
 public class PlayerController {
 
     private final PlayerService playerService;

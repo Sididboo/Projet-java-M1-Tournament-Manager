@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -44,6 +45,7 @@ public class TeamControllerTest {
 
     // #region createTeam
     @Test
+    @WithMockUser(username="admin")
     void testCreateTeam_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -62,6 +64,7 @@ public class TeamControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin")
     void testCreateTeam_shouldBeBadRequest_withoutData() throws Exception {
         // Without teamName
         MockRequest.mockPostRequest(
@@ -83,6 +86,7 @@ public class TeamControllerTest {
 
     // #region getTeams
     @Test
+    @WithMockUser(username="user")
     void testGetTeams_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -104,6 +108,7 @@ public class TeamControllerTest {
 
     // #region getTeamById
     @Test
+    @WithMockUser(username="user")
     void testGetTeamById_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -125,12 +130,14 @@ public class TeamControllerTest {
     }
 
     @Test
+    @WithMockUser(username="user")
     void testGetTeamById_shouldBeNotFound() throws Exception {
         mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(username="user")
     void testGetTeamById_shouldBeBadRequest() throws Exception {
         mockMvc.perform(get(URL_TEMPLATE + "/aError400"))
                 .andExpect(status().isBadRequest());
@@ -139,6 +146,7 @@ public class TeamControllerTest {
 
     // #region updatePlayer
     @Test
+    @WithMockUser(username="admin")
     void testUpdateTeam_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);

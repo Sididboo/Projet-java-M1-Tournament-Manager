@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,6 +42,7 @@ public class PlayerControllerTest {
 
     // #region createPlayer
     @Test
+    @WithMockUser(username="admin")
     public void testCreatePlayer_shouldBeOk() throws Exception {
         MvcResult mvcResult = MockRequest.mockPostRequest(
                 mockMvc,
@@ -54,6 +56,7 @@ public class PlayerControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin")
     void testCreatePlayer_whenForgotParams_shouldBeBadRequest() throws Exception {
         // Without pseudo
         MockRequest.mockPostRequest(
@@ -75,6 +78,7 @@ public class PlayerControllerTest {
 
     // #region getPlayers
     @Test
+    @WithMockUser(username="user")
     void testGetPlayers_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -92,6 +96,7 @@ public class PlayerControllerTest {
 
     // #region getPlayerById
     @Test
+    @WithMockUser(username="user")
     void testGetPlayerById_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -107,12 +112,14 @@ public class PlayerControllerTest {
     }
 
     @Test
+    @WithMockUser(username="user")
     void testGetPlayerById_shouldBeNotFound() throws Exception {
         mockMvc.perform(get(URL_TEMPLATE + "/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(username="user")
     void testGetPlayerById_shouldBeBadRequest() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
@@ -124,6 +131,7 @@ public class PlayerControllerTest {
 
     // #region updatePlayer
     @Test
+    @WithMockUser(username="admin")
     void testUpdatePlayer_shouldBeOk() throws Exception {
         // Test data
         playerRepository.save(Constant.P1);
