@@ -20,13 +20,13 @@ public interface TournamentMapper {
 
     TournamentDto mapToDto(Tournament tournament);
 
+    @Mapping(target = "nameState", source = "state.name")
+    TournamentDetailDto mapToDetailDto(Tournament tournament);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "winningTeam", ignore = true)
     Tournament mapToEntity(TournamentCreateDto tournamentCreateDto, List<Team> teams);
-
-    @Mapping(target = "nameState", source = "state.name")
-    TournamentDetailDto mapToDetailDto(Tournament tournament);
 
     // This mapper will be automatically detected if another mapper needs to map the
     // same type

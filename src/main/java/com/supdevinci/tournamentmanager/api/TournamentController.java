@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.supdevinci.tournamentmanager.api.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.supdevinci.tournamentmanager.api.dto.TournamentCreateDto;
-import com.supdevinci.tournamentmanager.api.dto.TournamentDetailDto;
-import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
-import com.supdevinci.tournamentmanager.api.dto.TournamentUpdateDto;
 import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
 import com.supdevinci.tournamentmanager.api.exception.InternalServerErrorException;
 import com.supdevinci.tournamentmanager.api.exception.MissedTeamException;
@@ -56,8 +53,9 @@ public class TournamentController {
             @RequestBody @Valid TournamentCreateDto tournamentCreateDto) {
         // Recovery of the teams with the list of identifiers
         List<Team> teams = teamService.findTeamsByIds(tournamentCreateDto.getTeamIds());
-
         Tournament tournament = mapper.mapToEntity(tournamentCreateDto, teams);
+
+        tournament.setNumberOfParticipants((int) teams.stream().map(mapper::mapToTeamDto).count());
 
         // The "Planned" state is assigned by default when a tournament is created
         Optional<State> state = stateService.findStateById(1L);
@@ -87,9 +85,26 @@ public class TournamentController {
     }
 
     /**
+     * Get tournament details.
+     *
+     * @param id
+     * @return the details of one tournament
+     */
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<TournamentDetailDto> getTournamentById(@PathVariable(name = "id") Long id) {
+        Optional<Tournament> tournament = tournamentService.findTournamentById(id);
+
+        if (tournament.isEmpty()) {
+            throw new ResourceNotFoundException("Tournament", id);
+        } else {
+            return ResponseEntity.ok(mapper.mapToDetailDto(tournament.get()));
+        }
+    }
+
+    /**
      * Update tournament state.
      *
-     * @param id                  tournament identifier
+     * @param id
      * @param tournamentUpdateDto
      * @return update tournament
      */
@@ -123,6 +138,12 @@ public class TournamentController {
         if (tournamentUpdateDto.getId() == 3 && tournamentUpdateDto.getWinningTeamId() == null) {
             throw new MissedTeamException(tournamentUpdateDto.getStateId());
         }
+
+       /* // Get number of participant
+        List<Team> teams = teamService.findTeamsByIds(tournamentUpdateDto.getTeamIds());
+        tournament.setNumberOfParticipants((int) teams.stream().map(mapper::mapToTeamDto).count());
+        */
+
 
         // Get winning team
         if (tournamentUpdateDto.getWinningTeamId() != null) {

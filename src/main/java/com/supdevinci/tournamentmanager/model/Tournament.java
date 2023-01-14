@@ -46,8 +46,11 @@ public class Tournament {
     @ManyToOne(fetch = FetchType.LAZY)
     private State state;
 
-    @ManyToMany(mappedBy = "tournaments")
+    @ManyToMany
     private List<Team> teams;
+
+    @Column(nullable = false)
+    private Integer numberOfParticipants;
 
     @OneToOne
     private Team winningTeam;
@@ -61,14 +64,18 @@ public class Tournament {
      * @param dateBegin
      * @param state
      * @param teams
+     * @param numberOfParticipants
      */
-    public Tournament(Long id, String subject, String description, Timestamp dateBegin, State state, List<Team> teams) {
+    public Tournament(Long id, String subject, String description, Timestamp dateBegin, State state, List<Team> teams, Integer numberOfParticipants) {
         this.id = id;
         this.subject = subject;
         this.description = description;
         this.dateBegin = dateBegin;
         this.state = state;
         this.teams = teams;
+        this.numberOfParticipants = numberOfParticipants;
+
     }
+
 
 }

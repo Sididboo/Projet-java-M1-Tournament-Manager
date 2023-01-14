@@ -1,6 +1,8 @@
 package com.supdevinci.tournamentmanager.Controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Assert;
@@ -9,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -91,6 +94,51 @@ public class TournamentControllerTest {
         Assert.assertTrue(true);
     }
 
+    // #endregion
+
+    // #region getTournament
+
+    @Test
+    void testGetTournament_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+        tournamentRepository.save(Constant.TO2);
+
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertEquals(
+                "[{\"id\":1,\"subject\":\"TO1\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"},{\"id\":2,\"teamName\":\"T2\"}],\"numberOfParticipants\":2},{\"id\":2,\"subject\":\"TO2\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"},{\"id\":2,\"teamName\":\"T2\"}],\"numberOfParticipants\":2}]",
+                mvcResult.getResponse().getContentAsString());
+    }
+
+
+
+    @Test
+    void testGetTournamentById_shouldBeOk() throws Exception {
+        // Test data
+        playerRepository.save(Constant.P1);
+        playerRepository.save(Constant.P2);
+        playerRepository.save(Constant.P3);
+        teamRepository.save(Constant.T1);
+        teamRepository.save(Constant.T2);
+        tournamentRepository.save(Constant.TO1);
+
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/1"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertEquals("{\"id\":1,\"subject\":\"TO1\",\"description\":\"TO1 Desc\",\"nameState\":\"PlanifiÃ©\",\"dateBegin\":\"2023-02-10T23:00:00.000+00:00\",\"teams\":[{\"id\":1,\"teamName\":\"T1\"},{\"id\":2,\"teamName\":\"T2\"}]}",
+                mvcResult.getResponse().getContentAsString());
+
+    }
     // #endregion
 
     // #region updateTournament
