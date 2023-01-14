@@ -9,9 +9,12 @@ import com.supdevinci.tournamentmanager.model.Player;
  * Interface for PlayerServiceImpl.
  */
 public interface PlayerService {
+
     /**
-     * Save player in database.
-     * 
+     * Create player in database.
+     * or
+     * Update player in database
+     *
      * @param player
      * @return the player saved
      */
@@ -31,4 +34,14 @@ public interface PlayerService {
      * @return one player
      */
     Optional<Player> findPlayerById(Long id);
+
+    /**
+     * 
+     * Find players with list of identifiers.
+     * 
+     * @param ids
+     * @return list of players
+     */
+    List<Player> findPlayersByIds(List<Long> ids);
+
 }

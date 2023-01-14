@@ -1,17 +1,17 @@
 package com.supdevinci.tournamentmanager.api.dto;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class PlayerDetailDto {
+public class PlayerCreateDto {
 
-    Long id;
+    @NotBlank
     String pseudo;
+    @NotBlank
     String postalAddress;
-    List<TeamDto> teams;
 
 }

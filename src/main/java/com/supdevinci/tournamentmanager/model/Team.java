@@ -28,13 +28,13 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String teamName;
 
     @ManyToMany
     private List<Player> players;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "teams")
     private List<Tournament> tournaments;
 
     /**

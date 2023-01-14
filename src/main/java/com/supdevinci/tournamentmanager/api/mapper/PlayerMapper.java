@@ -3,6 +3,7 @@ package com.supdevinci.tournamentmanager.api.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.supdevinci.tournamentmanager.api.dto.PlayerCreateDto;
 import com.supdevinci.tournamentmanager.api.dto.PlayerDetailDto;
 import com.supdevinci.tournamentmanager.api.dto.PlayerDto;
 import com.supdevinci.tournamentmanager.api.dto.TeamDto;
@@ -19,7 +20,12 @@ public interface PlayerMapper {
 
     PlayerDetailDto mapToDetailDto(Player player);
 
-    // This mapper will be automatically detected if another mapper needs to map the same type
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "teams", ignore = true)
+    Player mapToEntity(PlayerCreateDto playerCreateDto);
+
+    // This mapper will be automatically detected if another mapper needs to map the
+    // same type
     @Mapping(target = "players", ignore = true)
     TeamDto mapToTeamDto(Team team);
 

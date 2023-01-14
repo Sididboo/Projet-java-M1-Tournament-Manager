@@ -10,6 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 import com.supdevinci.tournamentmanager.api.dto.ApiError;
 import com.supdevinci.tournamentmanager.api.dto.ErrorCodeEnum;
 import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
+import com.supdevinci.tournamentmanager.api.exception.InternalServerErrorException;
+import com.supdevinci.tournamentmanager.api.exception.MissedTeamException;
 import com.supdevinci.tournamentmanager.api.exception.ResourceNotFoundException;
 
 /**
@@ -55,4 +57,27 @@ public class MyControllerAdvice {
                 .build();
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { InternalServerErrorException.class })
+    protected ApiError handleBadRequest(InternalServerErrorException indication) {
+        return ApiError.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .message(indication.getMessage())
+                .error(ErrorCodeEnum.INTERNAL_SERVER_ERROR)
+                .build();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = { MissedTeamException.class })
+    protected ApiError handleBadRequest(MissedTeamException ex, WebRequest request) {
+        return ApiError.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .error(ErrorCodeEnum.MISSED_TEAM)
+                .build();
+    }
 }

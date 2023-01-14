@@ -6,5 +6,7 @@ package com.supdevinci.tournamentmanager.api.dto;
 public enum ErrorCodeEnum {
     RESOURCE_NOT_FOUND,
     ID_MISMATCH,
-    BAD_TYPE_VALUE
+    BAD_TYPE_VALUE,
+    INTERNAL_SERVER_ERROR,
+    MISSED_TEAM
 }
