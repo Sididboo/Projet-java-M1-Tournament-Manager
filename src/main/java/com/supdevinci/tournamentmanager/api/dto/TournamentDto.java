@@ -6,15 +6,16 @@ import lombok.Data;
 
 import java.util.List;
 
+
 @Data
 @Builder
 public class TournamentDto {
 
     Long id;
     String subject;
-
     // Mapping ignore if null value
     @JsonInclude(JsonInclude.Include.NON_NULL)
     List<TeamDto> teams;
+    Integer numberOfParticipants;
 
 }

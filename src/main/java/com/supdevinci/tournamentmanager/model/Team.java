@@ -34,7 +34,7 @@ public class Team {
     @ManyToMany
     private List<Player> players;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "teams")
     private List<Tournament> tournaments;
 
     /**

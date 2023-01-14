@@ -17,12 +17,11 @@ import com.supdevinci.tournamentmanager.model.Team;
 @Mapper(componentModel = "spring")
 public interface TeamMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tournaments", ignore = true)
-    Team mapToEntity(TeamCreateDto teamCreateDto, List<Player> players);
-
     TeamDto mapToDto(Team team);
 
     TeamDetailDto mapToDetailDto(Team team, Integer nbVictories);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tournaments", ignore = true)
+    Team mapToEntity(TeamCreateDto teamCreateDto, List<Player> players);
 }
