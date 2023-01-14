@@ -9,6 +9,10 @@ Ce projet est une API en Java Spring Boot permettant d'organiser et piloter des 
 
 ## Installation
 
+### Branches
+- v1-sans-bonus
+- v1-avec-bonus
+
 Via docker pour la BDD
 
 ```bash
