@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.supdevinci.tournamentmanager.api.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.supdevinci.tournamentmanager.api.dto.TournamentCreateDto;
+import com.supdevinci.tournamentmanager.api.dto.TournamentDetailDto;
+import com.supdevinci.tournamentmanager.api.dto.TournamentDto;
+import com.supdevinci.tournamentmanager.api.dto.TournamentUpdateDto;
 import com.supdevinci.tournamentmanager.api.exception.IdMismatchException;
 import com.supdevinci.tournamentmanager.api.exception.InternalServerErrorException;
 import com.supdevinci.tournamentmanager.api.exception.MissedTeamException;
@@ -104,7 +107,7 @@ public class TournamentController {
     /**
      * Update tournament state.
      *
-     * @param id
+     * @param id tournament identifier
      * @param tournamentUpdateDto
      * @return update tournament
      */
@@ -132,18 +135,13 @@ public class TournamentController {
         }
 
         Tournament tournament = optionalTournament.get();
+        tournament.setTeams(optionalTournament.get().getTeams());
         tournament.setState(optionalState.get());
 
         // If the status identifier is 3 ("Completed") then a team is required
         if (tournamentUpdateDto.getId() == 3 && tournamentUpdateDto.getWinningTeamId() == null) {
             throw new MissedTeamException(tournamentUpdateDto.getStateId());
         }
-
-       /* // Get number of participant
-        List<Team> teams = teamService.findTeamsByIds(tournamentUpdateDto.getTeamIds());
-        tournament.setNumberOfParticipants((int) teams.stream().map(mapper::mapToTeamDto).count());
-        */
-
 
         // Get winning team
         if (tournamentUpdateDto.getWinningTeamId() != null) {

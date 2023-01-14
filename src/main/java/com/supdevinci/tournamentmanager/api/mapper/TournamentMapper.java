@@ -26,6 +26,7 @@ public interface TournamentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "winningTeam", ignore = true)
+    @Mapping(target = "numberOfParticipants", ignore = true)
     Tournament mapToEntity(TournamentCreateDto tournamentCreateDto, List<Team> teams);
 
     // This mapper will be automatically detected if another mapper needs to map the
