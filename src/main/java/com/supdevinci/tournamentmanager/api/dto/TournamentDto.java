@@ -1,10 +1,11 @@
 package com.supdevinci.tournamentmanager.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
+
 
 
 @Data
@@ -13,9 +14,7 @@ public class TournamentDto {
 
     Long id;
     String subject;
-    // Mapping ignore if null value
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    List<TeamDto> teams;
+    Date dateBegin;
     Integer numberOfParticipants;
 
 }
