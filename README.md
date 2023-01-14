@@ -115,8 +115,7 @@ http://localhost:8080
 ```
 {
   "id":...,
-  "pseudo":"...",
-  "postalAddress":"..."
+  "pseudo":"..."
 }
 ```
 #### <a name="3"></a>Equipe Json POST
